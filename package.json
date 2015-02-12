@@ -1,0 +1,22 @@
+{
+  "name": "heroku-fork",
+  "version": "0.0.0",
+  "description": "Heroku CLI plugin to fork an existing app into a new app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jshint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/heroku-fork.git"
+  },
+  "keywords": [
+    "heroku-plugin"
+  ],
+  "author": "Jeff Dickey (@dickeyxxx)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heroku/heroku-fork/issues"
+  },
+  "homepage": "https://github.com/heroku/heroku-fork"
+}
