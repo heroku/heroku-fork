@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+var netrc = require('netrc')()['api.heroku.com'];
+var fork = require('../index').commands[0];
+fork.run({
+  app: 'dickey-xxx',
+  args: {},
+  auth: { username: netrc.login, password: netrc.password }
+});
