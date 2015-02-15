@@ -18,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/heroku/heroku-fork/issues"
   },
-  "homepage": "https://github.com/heroku/heroku-fork"
+  "homepage": "https://github.com/heroku/heroku-fork",
+  "dependencies": {
+    "co": "^4.4.0",
+    "co-prompt": "^1.0.0",
+    "heroku-client": "^1.9.1"
+  },
+  "devDependencies": {
+    "jshint": "*"
+  }
 }
