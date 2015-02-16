@@ -1,6 +1,6 @@
 {
   "name": "heroku-fork",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Heroku CLI plugin to fork an existing app into a new app.",
   "main": "index.js",
   "scripts": {
