@@ -1,5 +1,6 @@
 exports.topics = [{
-  name: '_fork'
+  name: '_fork',
+  description: 'clone an existing app'
 }];
 
 exports.commands = [
