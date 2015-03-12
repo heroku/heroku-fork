@@ -42,6 +42,8 @@ New app name should not be an existing app. The new app will be created as part 
     });
     co(function* () {
       heroku = new Heroku({token: context.auth.password});
+      let copyData = !!context.args['copy-pg-data'];
+      if (!copyData) { console.error("Run fork with --copy-pg-data if you'd also like to copy the postgres database data over"); }
       let apps = new Apps(heroku);
       let postgres = new Postgres(heroku);
       let addons = new Addons(heroku, postgres);
@@ -57,7 +59,7 @@ New app name should not be an existing app. The new app will be created as part 
       yield apps.copySlug(newApp, slug);
 
       if (stopping) { return; }
-      yield addons.copyAddons(oldApp, newApp, !!context.args['copy-pg-data']);
+      yield addons.copyAddons(oldApp, newApp, copyData);
 
       if (stopping) { return; }
       yield addons.copyConfigVars(oldApp, newApp);
