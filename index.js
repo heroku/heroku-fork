@@ -4,5 +4,5 @@ exports.topics = [{
 }];
 
 exports.commands = [
-  require('./lib/commands/fork')
+  require('./commands/fork')
 ];

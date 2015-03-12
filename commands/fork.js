@@ -1,10 +1,10 @@
 'use strict';
-let co              = require('co');
-let Heroku          = require('heroku-client');
-let ForkError       = require('../errors').ForkError;
-let AppsService      = require('../services/apps');
-let AddonsService    = require('../services/addons');
-let PostgresService = require('../services/postgres');
+let co         = require('co');
+let Heroku     = require('heroku-client');
+let ForkError  = require('../lib/errors').ForkError;
+let Apps       = require('../lib/apps');
+let Addons     = require('../lib/addons');
+let Postgres   = require('../lib/postgres');
 var heroku;
 
 function confirmThenDeleteApp(app) {
@@ -42,9 +42,9 @@ New app name should not be an existing app. The new app will be created as part 
     });
     co(function* () {
       heroku = new Heroku({token: context.auth.password});
-      let apps = new AppsService(heroku);
-      let postgres = new PostgresService(heroku);
-      let addons = new AddonsService(heroku, postgres);
+      let apps = new Apps(heroku);
+      let postgres = new Postgres(heroku);
+      let addons = new Addons(heroku, postgres);
 
       let oldApp = yield apps.getApp(context.app);
       let slug   = yield apps.getLastSlug(oldApp);
