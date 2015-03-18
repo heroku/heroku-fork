@@ -1,5 +1,5 @@
 exports.topics = [{
-  name: '_fork',
+  name: 'fork',
   description: 'clone an existing app'
 }];
 
