@@ -38,7 +38,7 @@ New app name should not be an existing app. The new app will be created as part 
     let stopping, newAppName;
     process.on('SIGINT', function () {
       stopping = true;
-      confirmThenDeleteApp(newAppName);
+      if (newAppName) { confirmThenDeleteApp(newAppName); }
     });
     co(function* () {
       heroku = new Heroku({token: context.auth.password});
