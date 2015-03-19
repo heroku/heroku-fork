@@ -74,6 +74,8 @@ New app name should not be an existing app. The new app will be created as part 
       if (newAppName) {
         console.error(`\nThere was an error forking to ${newAppName}.`);
         confirmThenDeleteApp(newAppName);
+      } else {
+        process.exit(1);
       }
     });
   }
