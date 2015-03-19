@@ -37,6 +37,7 @@ New app name should not be an existing app. The new app will be created as part 
   run: function (context) {
     let stopping, newAppName;
     process.on('SIGINT', function () {
+      if (stopping) { process.exit(1); }
       stopping = true;
       if (newAppName) { confirmThenDeleteApp(newAppName); }
     });
