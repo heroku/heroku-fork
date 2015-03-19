@@ -5,9 +5,9 @@ let ForkError  = require('../lib/errors').ForkError;
 let Apps       = require('../lib/apps');
 let Addons     = require('../lib/addons');
 let Postgres   = require('../lib/postgres');
-var heroku;
+var heroku, newAppName;
 
-function confirmThenDeleteApp(app) {
+function deleteApp(app) {
   console.error(`\nIn order to avoid being charged for any resources on ${app}, it is being destroyed...`);
   co(function* () {
     process.stdout.write(`Destroying app ${app}... `);
@@ -22,6 +22,26 @@ function confirmThenDeleteApp(app) {
   });
 }
 
+function handleErr(err) {
+  if (err instanceof ForkError) {
+    console.error(err.message);
+    process.exit(1);
+  }
+  if (err.body) {
+    console.error("\n !  " + err.body.message);
+  } else {
+    console.error(err.stack);
+  }
+  if (newAppName) {
+    console.error(`\nThere was an error forking to ${newAppName}.`);
+    deleteApp(newAppName);
+  } else {
+    process.exit(1);
+  }
+}
+
+process.on('uncaughtException', handleErr);
+
 module.exports = {
   topic: 'fork',
   needsAuth: true,
@@ -35,11 +55,11 @@ New app name should not be an existing app. The new app will be created as part 
   ],
   args: [{name: 'newname', optional: true}],
   run: function (context) {
-    let stopping, newAppName;
+    let stopping;
     process.on('SIGINT', function () {
       if (stopping) { process.exit(1); }
       stopping = true;
-      if (newAppName) { confirmThenDeleteApp(newAppName); }
+      if (newAppName) { deleteApp(newAppName); }
     });
     co(function* () {
       heroku = new Heroku({token: context.auth.password});
@@ -66,22 +86,6 @@ New app name should not be an existing app. The new app will be created as part 
       yield addons.copyConfigVars(oldApp, newApp);
 
       console.log(`Fork complete. View it at ${newApp.web_url}`);
-    }).catch(function (err) {
-      if (err instanceof ForkError) {
-        console.error(err.message);
-        process.exit(1);
-      }
-      if (err.body) {
-        console.error("\n !  " + err.body.message);
-      } else {
-        console.error(err.stack);
-      }
-      if (newAppName) {
-        console.error(`\nThere was an error forking to ${newAppName}.`);
-        confirmThenDeleteApp(newAppName);
-      } else {
-        process.exit(1);
-      }
-    });
+    }).catch(handleErr);
   }
 };
