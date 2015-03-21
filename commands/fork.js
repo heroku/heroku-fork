@@ -27,6 +27,7 @@ function handleErr(err) {
     console.error(err.message);
     process.exit(1);
   }
+  console.dir(err);
   if (err.body) {
     console.error("\n !  " + err.body.message);
   } else {
