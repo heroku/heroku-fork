@@ -28,7 +28,11 @@ function handleErr(err) {
     process.exit(1);
   }
   if (err.body) {
-    console.error("\n !  " + err.body.message);
+    if (err.body.message) {
+      console.error("\n !  " + err.body.message);
+    } else if (err.body.error) {
+      console.error("\n !  " + err.body.error);
+    }
   } else {
     console.error(err.stack);
   }
