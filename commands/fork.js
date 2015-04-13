@@ -28,7 +28,11 @@ function handleErr(err) {
     process.exit(1);
   }
   if (err.body) {
-    console.error("\n !  " + err.body.message);
+    if (err.body.message) {
+      console.error("\n !  " + err.body.message);
+    } else if (err.body.error) {
+      console.error("\n !  " + err.body.error);
+    }
   } else {
     console.error(err.stack);
   }
@@ -43,15 +47,14 @@ function handleErr(err) {
 process.on('uncaughtException', handleErr);
 
 module.exports = {
-  topic: 'fork',
+  topic: '_fork',
   needsAuth: true,
   needsApp: true,
   help: `Fork an existing app -- copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
 New app name should not be an existing app. The new app will be created as part of the forking process.`,
   flags: [
     {name: 'stack', char: 's', description: 'specify a stack for the new app', hasValue: true},
-    {name: 'region', description: 'specify a region', hasValue: true},
-    {name: 'copy-pg-data', description: 'copy postgres database data instead of just creating empty databases', hasValue: false}
+    {name: 'region', description: 'specify a region', hasValue: true}
   ],
   args: [{name: 'newname', optional: true}],
   run: function (context) {
@@ -63,8 +66,6 @@ New app name should not be an existing app. The new app will be created as part 
     });
     co(function* () {
       heroku = new Heroku({token: context.auth.password});
-      let copyData = !!context.args['copy-pg-data'];
-      if (!copyData) { console.error("Run fork with --copy-pg-data if you'd also like to copy the postgres database data over"); }
       let apps = new Apps(heroku);
       let postgres = new Postgres(heroku);
       let addons = new Addons(heroku, postgres);
@@ -80,7 +81,7 @@ New app name should not be an existing app. The new app will be created as part 
       yield apps.copySlug(newApp, slug);
 
       if (stopping) { return; }
-      yield addons.copyAddons(oldApp, newApp, copyData);
+      yield addons.copyAddons(oldApp, newApp);
 
       if (stopping) { return; }
       yield addons.copyConfigVars(oldApp, newApp);
