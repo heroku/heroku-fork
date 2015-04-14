@@ -54,7 +54,8 @@ module.exports = {
 New app name should not be an existing app. The new app will be created as part of the forking process.`,
   flags: [
     {name: 'stack', char: 's', description: 'specify a stack for the new app', hasValue: true},
-    {name: 'region', description: 'specify a region', hasValue: true}
+    {name: 'region', description: 'specify a region', hasValue: true},
+    {name: 'skip-pg', description: 'skip postgres databases', hasValue: false}
   ],
   args: [{name: 'newname', optional: true}],
   run: function (context) {
@@ -81,7 +82,7 @@ New app name should not be an existing app. The new app will be created as part 
       yield apps.copySlug(newApp, slug);
 
       if (stopping) { return; }
-      yield addons.copyAddons(oldApp, newApp);
+      yield addons.copyAddons(oldApp, newApp, context.args['skip-pg']);
 
       if (stopping) { return; }
       yield addons.copyConfigVars(oldApp, newApp);
