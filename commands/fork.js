@@ -47,7 +47,7 @@ function handleErr(err) {
 process.on('uncaughtException', handleErr);
 
 module.exports = {
-  topic: '_fork',
+  topic: 'fork',
   needsAuth: true,
   needsApp: true,
   help: `Fork an existing app -- copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
