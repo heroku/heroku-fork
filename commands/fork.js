@@ -7,6 +7,12 @@ let Addons     = require('../lib/addons');
 let Postgres   = require('../lib/postgres');
 var heroku, newAppName;
 
+function wait(ms) {
+  return function(done) {
+    setTimeout(done, ms);
+  };
+}
+
 function deleteApp(app) {
   console.error(`\nIn order to avoid being charged for any resources on ${app}, it is being destroyed...`);
   co(function* () {
@@ -81,6 +87,7 @@ New app name should not be an existing app. The new app will be created as part 
       if (stopping) { return; }
       yield apps.copySlug(newApp, slug);
 
+      yield wait(2000); // TODO remove this after api #4022
       if (stopping) { return; }
       yield addons.copyAddons(oldApp, newApp, context.args['skip-pg']);
 
