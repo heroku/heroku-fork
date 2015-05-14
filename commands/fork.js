@@ -36,7 +36,7 @@ Example:
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
     {name: 'from', description: 'app to fork from', hasValue: true},
     {name: 'to', description: 'app to create', hasValue: true},
-    {name: 'app', hasValue: true, hidden: true}
+    {name: 'app', char: 'a', hasValue: true, hidden: true}
   ],
   args: [{name: 'NEWNAME', optional: true, hidden: true}],
   run: cli.command(function* (context, heroku) {
