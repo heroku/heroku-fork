@@ -24,14 +24,15 @@ module.exports = {
   topic: 'fork',
   needsAuth: true,
   needsApp: true,
-  help: `Fork an existing app -- copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
+  description: 'Fork an existing app into a new one',
+  help: `Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
   New app name should not be an existing app. The new app will be created as part of the forking process.`,
   flags: [
     {name: 'stack', char: 's', description: 'specify a stack for the new app', hasValue: true},
     {name: 'region', description: 'specify a region', hasValue: true},
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false}
   ],
-  args: [{name: 'newname', optional: true}],
+  args: [{name: 'NEWNAME', optional: true}],
   run: h.command(function* (context, heroku) {
     let stopping, newAppName;
     process.once('SIGINT', function () {
@@ -46,7 +47,7 @@ module.exports = {
     let slug   = yield apps.getLastSlug(oldApp);
 
     if (stopping) { return; }
-    let newApp = yield apps.createNewApp(oldApp, context.args.newname, context.flags.stack, context.flags.region);
+    let newApp = yield apps.createNewApp(oldApp, context.args.NEWNAME, context.flags.stack, context.flags.region);
     newAppName = newApp.name;
 
     try {
