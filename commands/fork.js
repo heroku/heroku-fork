@@ -26,7 +26,7 @@ module.exports = {
   needsApp: true,
   description: 'Fork an existing app into a new one',
   help: `Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
-  New app name should not be an existing app. The new app will be created as part of the forking process.`,
+New app name should not be an existing app. The new app will be created as part of the forking process.`,
   flags: [
     {name: 'stack', char: 's', description: 'specify a stack for the new app', hasValue: true},
     {name: 'region', description: 'specify a region', hasValue: true},
