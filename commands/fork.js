@@ -4,7 +4,7 @@ let co         = require('co');
 let Apps       = require('../lib/apps');
 let Addons     = require('../lib/addons');
 let Postgres   = require('../lib/postgres');
-let h          = require('heroku-cli-util');
+let cli        = require('heroku-cli-util');
 
 function wait(ms) {
   return function(done) {
@@ -15,7 +15,7 @@ function wait(ms) {
 function deleteApp(app, heroku) {
   co(function* () {
     console.error(`\nIn order to avoid being charged for any resources on ${app}, it is being destroyed...`);
-    yield h.action(`Destroying app ${app}`, heroku.apps(app).delete());
+    yield cli.action(`Destroying app ${app}`, heroku.apps(app).delete());
     process.exit(1);
   });
 }
@@ -23,32 +23,49 @@ function deleteApp(app, heroku) {
 module.exports = {
   topic: 'fork',
   needsAuth: true,
-  needsApp: true,
   description: 'Fork an existing app into a new one',
   help: `Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
-New app name should not be an existing app. The new app will be created as part of the forking process.`,
+New app name should not be an existing app. The new app will be created as part of the forking process.
+
+Example:
+
+  $ heroku fork --from my-production-app --to my-development-app`,
   flags: [
     {name: 'stack', char: 's', description: 'specify a stack for the new app', hasValue: true},
     {name: 'region', description: 'specify a region', hasValue: true},
-    {name: 'skip-pg', description: 'skip postgres databases', hasValue: false}
+    {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
+    {name: 'from', description: 'app to fork from', hasValue: true},
+    {name: 'to', description: 'app to create', hasValue: true},
+    {name: 'app', hasValue: true, hidden: true}
   ],
-  args: [{name: 'NEWNAME', optional: true}],
-  run: h.command(function* (context, heroku) {
-    let stopping, newAppName;
+  args: [{name: 'NEWNAME', optional: true, hidden: true}],
+  run: cli.command(function* (context, heroku) {
+    let stopping;
+    let fromAppName = context.flags.from || context.flags.app;
+    let toAppName   = context.flags.to || context.args.NEWNAME;
+    if (!fromAppName) {
+      cli.error('No source app specified.\nSpecify an app to fork from with --from APP');
+    }
+    if (context.flags.app) {
+      cli.warn('Specifying the source app without --from APP is deprecated');
+    }
+    if (context.args.NEWNAME) {
+      cli.warn('Specifying the new app without --to APP is deprecated');
+    }
     process.once('SIGINT', function () {
       stopping = true;
-      if (newAppName) { deleteApp(newAppName, heroku); }
+      if (toAppName) { deleteApp(toAppName, heroku); }
     });
     let apps = new Apps(heroku);
     let postgres = new Postgres(heroku);
     let addons = new Addons(heroku, postgres);
 
-    let oldApp = yield apps.getApp(context.app);
+    let oldApp = yield apps.getApp(fromAppName);
     let slug   = yield apps.getLastSlug(oldApp);
 
     if (stopping) { return; }
-    let newApp = yield apps.createNewApp(oldApp, context.args.NEWNAME, context.flags.stack, context.flags.region);
-    newAppName = newApp.name;
+    let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
+    toAppName = newApp.name;
 
     try {
       if (stopping) { return; }
@@ -63,7 +80,7 @@ New app name should not be an existing app. The new app will be created as part 
 
       console.log(`Fork complete. View it at ${newApp.web_url}`);
     } catch (err) {
-      h.errorHandler({
+      cli.errorHandler({
         exit:    false,
         logPath: context.herokuDir + '/error.log',
       })(err);
