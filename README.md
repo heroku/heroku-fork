@@ -22,5 +22,5 @@ Fork an existing app into a new one
 
 ```
 Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
-  New app name should not be an existing app. The new app will be created as part of the forking process.
+New app name should not be an existing app. The new app will be created as part of the forking process.
 ```
