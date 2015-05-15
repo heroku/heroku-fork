@@ -66,8 +66,7 @@ Example:
 
     if (stopping) { return; }
     let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
-    toAppName = newApp.name;
-    deleteAppOnFailure = true;
+    deleteAppOnFailure = newApp.name;
 
     try {
       if (stopping) { return; }
@@ -88,7 +87,7 @@ Example:
       })(err);
       if (deleteAppOnFailure) {
         console.error(`\nThere was an error forking to ${toAppName}.`);
-        deleteApp(toAppName, heroku);
+        deleteApp(deleteAppOnFailure, heroku);
       } else {
         process.exit(1);
       }
