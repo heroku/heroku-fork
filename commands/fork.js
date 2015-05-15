@@ -45,6 +45,7 @@ Example:
     let toAppName   = context.flags.to || context.args.NEWNAME;
     if (!fromAppName) {
       cli.error('No source app specified.\nSpecify an app to fork from with --from APP');
+      return;
     }
     if (context.flags.app) {
       cli.warn('Specifying the source app without --from APP is deprecated');
