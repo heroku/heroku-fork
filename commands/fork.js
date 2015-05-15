@@ -52,9 +52,10 @@ Example:
     if (context.args.NEWNAME) {
       cli.warn('Specifying the new app without --to APP is deprecated');
     }
+    let deleteAppOnFailure = false;
     process.once('SIGINT', function () {
       stopping = true;
-      if (toAppName) { deleteApp(toAppName, heroku); }
+      if (deleteAppOnFailure) { deleteApp(toAppName, heroku); }
     });
     let apps = new Apps(heroku);
     let postgres = new Postgres(heroku);
@@ -66,6 +67,7 @@ Example:
     if (stopping) { return; }
     let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
     toAppName = newApp.name;
+    deleteAppOnFailure = true;
 
     try {
       if (stopping) { return; }
