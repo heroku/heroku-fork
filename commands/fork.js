@@ -39,9 +39,10 @@ Example:
     {name: 'app', char: 'a', hasValue: true, hidden: true}
   ],
   args: [{name: 'NEWNAME', optional: true, hidden: true}],
-  run: cli.command(function* (context, heroku) {
+  run: cli.command({preauth: true}, function* (context, heroku) {
     let stopping;
     let fromAppName = context.flags.from || context.flags.app;
+    context.app = fromAppName;
     let toAppName   = context.flags.to || context.args.NEWNAME;
     if (!fromAppName) {
       cli.error('No source app specified.\nSpecify an app to fork from with --from APP');
