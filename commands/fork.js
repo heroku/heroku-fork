@@ -86,9 +86,9 @@ Example:
         exit:    false,
         logPath: context.herokuDir + '/error.log',
       })(err);
-      if (newAppName) {
-        console.error(`\nThere was an error forking to ${newAppName}.`);
-        deleteApp(newAppName, heroku);
+      if (deleteAppOnFailure) {
+        console.error(`\nThere was an error forking to ${toAppName}.`);
+        deleteApp(toAppName, heroku);
       } else {
         process.exit(1);
       }
