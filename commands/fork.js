@@ -6,6 +6,11 @@ let Addons     = require('../lib/addons');
 let Postgres   = require('../lib/postgres');
 let cli        = require('heroku-cli-util');
 
+let stopping;
+let fromAppName;
+let toAppName;
+let deleteAppOnFailure;
+
 function wait(ms) {
   return function(done) {
     setTimeout(done, ms);
@@ -17,6 +22,71 @@ function deleteApp(app, heroku) {
     console.error(`\nIn order to avoid being charged for any resources on ${app}, it is being destroyed...`);
     yield cli.action(`Destroying app ${app}`, heroku.apps(app).delete());
     process.exit(1);
+  });
+}
+
+function handleErr(context, heroku) {
+  return function (err) {
+    cli.errorHandler({
+      exit:    false,
+      logPath: context.herokuDir + '/error.log',
+    })(err);
+    if (deleteAppOnFailure) {
+      console.error(`\nThere was an error forking to ${deleteAppOnFailure}.`);
+      deleteApp(deleteAppOnFailure, heroku);
+    } else {
+      process.exit(1);
+    }
+  };
+}
+
+function getFromApp(context) {
+  let fromAppName = context.flags.from || context.flags.app;
+  if (context.flags.app) {
+    cli.warn('Specifying the source app without --from APP is deprecated');
+  }
+  if (!fromAppName) {
+    cli.error('No source app specified.\nSpecify an app to fork from with --from APP');
+    return;
+  }
+  context.app = fromAppName;
+  return fromAppName;
+}
+
+function getToApp(context) {
+  if (context.args.NEWNAME) {
+    cli.warn('Specifying the new app without --to APP is deprecated');
+  }
+  return context.flags.to || context.args.NEWNAME;
+}
+
+function fork (context, heroku) {
+  return co(function* () {
+    let apps = new Apps(heroku);
+    let postgres = new Postgres(heroku);
+    let addons = new Addons(heroku, postgres);
+
+    let oldApp = yield apps.getApp(fromAppName);
+    let slug   = yield apps.getLastSlug(oldApp);
+
+    if (stopping) { return; }
+    let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
+    deleteAppOnFailure = newApp.name;
+
+    if (stopping) { return; }
+    yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
+
+    if (stopping) { return; }
+    yield apps.copySlug(newApp, slug);
+
+    yield wait(2000); // TODO remove this after api #4022
+    if (stopping) { return; }
+    yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
+
+    if (stopping) { return; }
+    yield addons.copyConfigVars(oldApp, newApp);
+
+    console.log(`Fork complete. View it at ${newApp.web_url}`);
   });
 }
 
@@ -39,63 +109,16 @@ Example:
     {name: 'app', char: 'a', hasValue: true, hidden: true}
   ],
   args: [{name: 'NEWNAME', optional: true, hidden: true}],
-  run: cli.command({preauth: true}, function* (context, heroku) {
-    let stopping;
-    let fromAppName = context.flags.from || context.flags.app;
-    context.app = fromAppName;
-    let toAppName   = context.flags.to || context.args.NEWNAME;
-    if (!fromAppName) {
-      cli.error('No source app specified.\nSpecify an app to fork from with --from APP');
-      return;
-    }
-    if (context.flags.app) {
-      cli.warn('Specifying the source app without --from APP is deprecated');
-    }
-    if (context.args.NEWNAME) {
-      cli.warn('Specifying the new app without --to APP is deprecated');
-    }
-    let deleteAppOnFailure = false;
+  run: cli.command({preauth: true}, function (context, heroku) {
+    fromAppName = getFromApp(context);
+    if (!fromAppName) { return; }
+    toAppName = getToApp(context);
+    if (!toAppName) { return; }
     process.once('SIGINT', function () {
       stopping = true;
       if (deleteAppOnFailure) { deleteApp(toAppName, heroku); }
     });
-    let apps = new Apps(heroku);
-    let postgres = new Postgres(heroku);
-    let addons = new Addons(heroku, postgres);
-
-    let oldApp = yield apps.getApp(fromAppName);
-    let slug   = yield apps.getLastSlug(oldApp);
-
-    if (stopping) { return; }
-    let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
-    deleteAppOnFailure = newApp.name;
-
-    try {
-      if (stopping) { return; }
-      yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
-
-      if (stopping) { return; }
-      yield apps.copySlug(newApp, slug);
-
-      yield wait(2000); // TODO remove this after api #4022
-      if (stopping) { return; }
-      yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
-
-      if (stopping) { return; }
-      yield addons.copyConfigVars(oldApp, newApp);
-
-      console.log(`Fork complete. View it at ${newApp.web_url}`);
-    } catch (err) {
-      cli.errorHandler({
-        exit:    false,
-        logPath: context.herokuDir + '/error.log',
-      })(err);
-      if (deleteAppOnFailure) {
-        console.error(`\nThere was an error forking to ${toAppName}.`);
-        deleteApp(deleteAppOnFailure, heroku);
-      } else {
-        process.exit(1);
-      }
-    }
+    return fork(context, heroku)
+    .catch(handleErr(context, heroku));
   })
 };
