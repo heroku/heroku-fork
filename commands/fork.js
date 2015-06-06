@@ -72,6 +72,9 @@ Example:
 
     try {
       if (stopping) { return; }
+      yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
+
+      if (stopping) { return; }
       yield apps.copySlug(newApp, slug);
 
       yield wait(2000); // TODO remove this after api #4022
