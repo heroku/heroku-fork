@@ -60,34 +60,48 @@ function getToApp(context) {
   return context.flags.to || context.args.NEWNAME;
 }
 
-function fork (context, heroku) {
-  return co(function* () {
-    let apps = new Apps(heroku);
-    let postgres = new Postgres(heroku);
-    let addons = new Addons(heroku, postgres);
+function* fork (context, heroku) {
+  let apps = new Apps(heroku);
+  let postgres = new Postgres(heroku);
+  let addons = new Addons(heroku, postgres);
 
-    let oldApp = yield apps.getApp(fromAppName);
-    let slug   = yield apps.getLastSlug(oldApp);
+  let oldApp = yield apps.getApp(fromAppName);
+  let slug   = yield apps.getLastSlug(oldApp);
 
-    if (stopping) { return; }
-    let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
-    deleteAppOnFailure = newApp.name;
+  if (stopping) { return; }
+  let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
+  deleteAppOnFailure = newApp.name;
 
-    if (stopping) { return; }
-    yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
+  if (stopping) { return; }
+  yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
 
-    if (stopping) { return; }
-    yield apps.copySlug(newApp, slug);
+  if (stopping) { return; }
+  yield apps.copySlug(newApp, slug);
 
-    yield wait(2000); // TODO remove this after api #4022
-    if (stopping) { return; }
-    yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
+  yield wait(2000); // TODO remove this after api #4022
+  if (stopping) { return; }
+  yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
 
-    if (stopping) { return; }
-    yield addons.copyConfigVars(oldApp, newApp);
+  if (stopping) { return; }
+  yield addons.copyConfigVars(oldApp, newApp);
 
-    console.log(`Fork complete. View it at ${newApp.web_url}`);
+  console.log(`Fork complete. View it at ${newApp.web_url}`);
+}
+
+function* run (context, heroku) {
+  fromAppName = getFromApp(context);
+  if (!fromAppName) { return; }
+  toAppName = getToApp(context);
+  if (!toAppName) { return; }
+  process.once('SIGINT', function () {
+    stopping = true;
+    if (deleteAppOnFailure) { deleteApp(toAppName, heroku); }
   });
+  try {
+    yield fork(context, heroku);
+  } catch (err) {
+    handleErr(context, heroku)(err);
+  }
 }
 
 module.exports = {
@@ -109,16 +123,5 @@ Example:
     {name: 'app', char: 'a', hasValue: true, hidden: true}
   ],
   args: [{name: 'NEWNAME', optional: true, hidden: true}],
-  run: cli.command({preauth: true}, function (context, heroku) {
-    fromAppName = getFromApp(context);
-    if (!fromAppName) { return; }
-    toAppName = getToApp(context);
-    if (!toAppName) { return; }
-    process.once('SIGINT', function () {
-      stopping = true;
-      if (deleteAppOnFailure) { deleteApp(toAppName, heroku); }
-    });
-    return fork(context, heroku)
-    .catch(handleErr(context, heroku));
-  })
+  run: cli.command({preauth: true}, co.wrap(run))
 };
