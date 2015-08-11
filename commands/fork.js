@@ -100,6 +100,7 @@ function* run (context, heroku) {
   try {
     yield fork(context, heroku);
   } catch (err) {
+    if (err.body && err.body.id === 'two_factor') throw err;
     handleErr(context, heroku)(err);
   }
 }
