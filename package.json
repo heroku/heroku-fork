@@ -20,9 +20,9 @@
   },
   "homepage": "https://github.com/heroku/heroku-fork",
   "dependencies": {
-    "co": "^4.6.0",
-    "heroku-cli-util": "^5.4.1",
-    "lodash": "^3.10.0"
+    "co": "4.6.0",
+    "heroku-cli-util": "5.4.5",
+    "lodash": "3.10.1"
   },
   "devDependencies": {
     "jshint": "*"
