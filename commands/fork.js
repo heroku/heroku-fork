@@ -69,7 +69,7 @@ function* fork (context, heroku) {
   let slug   = yield apps.getLastSlug(oldApp);
 
   if (stopping) { return; }
-  let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.stack, context.flags.region);
+  let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.region);
   deleteAppOnFailure = newApp.name;
 
   if (stopping) { return; }
@@ -116,7 +116,6 @@ Example:
 
   $ heroku fork --from my-production-app --to my-development-app`,
   flags: [
-    {name: 'stack', char: 's', description: 'specify a stack for the new app', hasValue: true},
     {name: 'region', description: 'specify a region', hasValue: true},
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
     {name: 'from', description: 'app to fork from', hasValue: true},
