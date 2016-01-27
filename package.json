@@ -4,7 +4,9 @@
   "description": "Heroku CLI plugin to fork an existing app into a new app.",
   "main": "index.js",
   "scripts": {
-    "test": "jshint ."
+    "test": "jshint .",
+    "preversion": "npm test",
+    "postversion": "npm publish && git push && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -21,8 +23,8 @@
   "homepage": "https://github.com/heroku/heroku-fork",
   "dependencies": {
     "co": "4.6.0",
-    "heroku-cli-util": "5.4.5",
-    "lodash": "3.10.1"
+    "heroku-cli-util": "5.7.4",
+    "lodash": "4.0.1"
   },
   "devDependencies": {
     "jshint": "*"
