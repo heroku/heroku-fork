@@ -1,7 +1,6 @@
 heroku-fork
 ===========
 
-[![Build Status](https://travis-ci.org/heroku/heroku-fork.svg?branch=master)](https://travis-ci.org/heroku/heroku-fork)
 [![License](https://img.shields.io/github/license/heroku/heroku-fork.svg)](https://github.com/heroku/heroku-fork/blob/master/LICENSE)
 
 Heroku CLI plugin to fork an existing app into a new app.
