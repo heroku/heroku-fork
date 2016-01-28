@@ -85,7 +85,7 @@ function* fork (context, heroku) {
   if (stopping) { return; }
   yield addons.copyConfigVars(oldApp, newApp);
 
-  console.log(`Fork complete. View it at ${newApp.web_url}`);
+  console.log(`Fork complete. View it at ${cli.color.cyan(newApp.web_url)}`);
 }
 
 function* run (context, heroku) {
