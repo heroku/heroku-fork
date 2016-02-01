@@ -76,15 +76,15 @@ function* fork (context, heroku) {
   yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
 
   if (stopping) { return; }
-  yield apps.copySlug(newApp, slug);
-
-  yield wait(2000); // TODO remove this after api #4022
-
-  if (stopping) { return; }
   yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
 
   if (stopping) { return; }
   yield addons.copyConfigVars(oldApp, newApp);
+
+  if (stopping) { return; }
+  yield apps.copySlug(newApp, slug);
+
+  yield wait(2000); // TODO remove this after api #4022
 
   console.log(`Fork complete. View it at ${cli.color.cyan(newApp.web_url)}`);
 }
