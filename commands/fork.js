@@ -76,7 +76,9 @@ function* fork (context, heroku) {
   yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
 
   if (stopping) { return; }
-  yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
+  if (!context.flags['skip-addons']) {
+    yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
+  }
 
   if (stopping) { return; }
   yield addons.copyConfigVars(oldApp, newApp);
@@ -119,6 +121,7 @@ Example:
   flags: [
     {name: 'region', description: 'specify a region', hasValue: true},
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
+    {name: 'skip-addons', description: 'skip all addons', hasValue: false},
     {name: 'from', description: 'app to fork from', hasValue: true},
     {name: 'to', description: 'app to create', hasValue: true},
     {name: 'app', char: 'a', hasValue: true, hidden: true}
