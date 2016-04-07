@@ -26,7 +26,8 @@
   "undef": true,
   "unused": true,
   "globals": {
-    "Promise": true
+    "Promise": true,
+    "cli": true
   },
   "predef": [
     "$",

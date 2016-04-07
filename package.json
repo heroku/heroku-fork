@@ -4,7 +4,7 @@
   "description": "Heroku CLI plugin to fork an existing app into a new app.",
   "main": "index.js",
   "scripts": {
-    "test": "jshint .",
+    "test": "mocha && jshint .",
     "preversion": "npm test",
     "postversion": "npm publish && git push && git push --tags"
   },
@@ -27,6 +27,9 @@
     "lodash": "4.0.1"
   },
   "devDependencies": {
-    "jshint": "*"
+    "jshint": "*",
+    "mocha": "2.3.3",
+    "nock": "7.5.0",
+    "chai": "3.5.0"
   }
 }
