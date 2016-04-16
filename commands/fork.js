@@ -79,7 +79,7 @@ function* fork (context, heroku) {
   yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg']);
 
   if (stopping) { return; }
-  yield addons.copyConfigVars(oldApp, newApp);
+  yield addons.copyConfigVars(oldApp, newApp, context.flags['skip-pg']);
 
   if (stopping) { return; }
   yield apps.copySlug(newApp, slug);
