@@ -20,7 +20,7 @@ function wait(ms) {
 function deleteApp(app, heroku) {
   co(function* () {
     console.error(`\nIn order to avoid being charged for any resources on ${app}, it is being destroyed...`);
-    yield cli.action(`Destroying app ${app}`, heroku.apps(app).delete());
+    yield cli.action(`Destroying app ${app}`, heroku.delete(`/apps/${app}`));
     process.exit(1);
   });
 }
