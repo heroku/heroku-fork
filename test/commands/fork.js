@@ -3,7 +3,7 @@
 let cli      = require('heroku-cli-util');
 let nock     = require('nock');
 let expect   = require('chai').expect;
-let cmd      = require('../../commands/fork');
+let cmd      = require('../../commands/fork').apps;
 
 describe('fork', function() {
     beforeEach(function() { 
