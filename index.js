@@ -1,8 +1,6 @@
-exports.topic = {
-  name: 'fork',
-  description: 'clone an existing app'
-};
+'use strict';
 
 exports.commands = [
-  require('./commands/fork')
+  require('./commands/fork').apps,
+  require('./commands/fork').root
 ];
