@@ -106,10 +106,9 @@ function* run (context, heroku) {
   }
 }
 
-module.exports = {
-  topic: 'fork',
+const cmd = {
   needsAuth: true,
-  description: 'Fork an existing app into a new one',
+  description: 'fork an existing app into a new one',
   help: `Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
 New app name should not be an existing app. The new app will be created as part of the forking process.
 
@@ -126,3 +125,6 @@ Example:
   args: [{name: 'NEWNAME', optional: true, hidden: true}],
   run: cli.command({preauth: true}, co.wrap(run))
 };
+
+exports.apps = Object.assign({topic: 'fork', hidden: true}, cmd);
+exports.root = Object.assign({topic: 'apps', command: 'fork'}, cmd);
