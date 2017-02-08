@@ -68,7 +68,7 @@ describe('fork', function() {
       .reply(200, {});
 
       nock('https://api.heroku.com')
-      .post('/apps/to/releases', {description:"Forked from to"})
+      .post('/apps/to/releases', {description:"Forked from from"})
       .reply(200, {});
     });
 

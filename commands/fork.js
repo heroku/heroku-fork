@@ -82,7 +82,7 @@ function* fork (context, heroku) {
   yield addons.copyConfigVars(oldApp, newApp, context.flags['skip-pg']);
 
   if (stopping) { return; }
-  yield apps.copySlug(newApp, slug);
+  yield apps.copySlug(oldApp, newApp, slug);
 
   yield wait(2000); // TODO remove this after api #4022
 
