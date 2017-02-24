@@ -74,7 +74,7 @@ describe('fork', function() {
 
     it("does not error out if the plan has shut down", function() {
       nock('https://api.heroku.com')
-      .post('/apps/to/addons', {attachment:{}, plan:"mandrill:starter"})
+      .post('/apps/to/addons', {attachment:{}, plan:{name:"mandrill:starter"}})
       .reply(422, {
         "id":"invalid_params",
         "message":"Couldn't find either the add-on service or the add-on plan of \"mandrill:starter:notfound\"."
@@ -83,14 +83,14 @@ describe('fork', function() {
       this.timeout(2500);
 
       return cmd.run({flags: {from: 'from', to: 'to'}, args: {}}).then(function() {
-        expect('Setting buildpacks... done\nAdding mandrill:starter to to as foo... !\n').to.equal(cli.stderr);
+        expect('Setting buildpacks... done\nCreating mandrill:starter on to... !\n').to.equal(cli.stderr);
         expect('').to.equal(cli.stdout);
       });
     });
 
     it("errors out if the plan could not be provisioned", function() {
       nock('https://api.heroku.com')
-      .post('/apps/to/addons', {attachment:{}, plan:"mandrill:starter"})
+      .post('/apps/to/addons', {attachment:{}, plan:{name:"mandrill:starter"}})
       .reply(500, {
         "id":"application_error",
         "message":"Everything is on fire"
@@ -102,7 +102,7 @@ describe('fork', function() {
       return cmd.run({flags: {from: 'from', to: 'to'}, args: {}}).catch(function(err) {
         thrown = true;
         expect(500).to.equal(err.statusCode);
-        expect('Setting buildpacks... done\nAdding mandrill:starter to to as foo... !\n').to.equal(cli.stderr);
+        expect('Setting buildpacks... done\nCreating mandrill:starter on to... !\n').to.equal(cli.stderr);
         expect('').to.equal(cli.stdout);
       }).then(function() {
         expect(thrown).to.equal(true);
