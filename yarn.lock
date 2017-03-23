@@ -576,13 +576,13 @@ has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
 
-heroku-cli-addons@1.2.12:
-  version "1.2.12"
-  resolved "https://registry.yarnpkg.com/heroku-cli-addons/-/heroku-cli-addons-1.2.12.tgz#1f6bd51462576aaa39219cd20d2a9c30be6b39a3"
+heroku-cli-addons@1.2.13:
+  version "1.2.13"
+  resolved "https://registry.yarnpkg.com/heroku-cli-addons/-/heroku-cli-addons-1.2.13.tgz#b6ae28a50ccb190409374bdcb5d6753049dfd9d4"
   dependencies:
     co "4.6.0"
     co-wait "0.0.0"
-    heroku-cli-util "6.1.14"
+    heroku-cli-util "6.1.15"
     lodash.flatten "4.4.0"
     lodash.groupby "4.6.0"
     lodash.memoize "4.1.2"
@@ -593,9 +593,9 @@ heroku-cli-addons@1.2.12:
     lodash.values "4.3.0"
     printf "0.2.5"
 
-heroku-cli-util@6.1.14:
-  version "6.1.14"
-  resolved "https://registry.yarnpkg.com/heroku-cli-util/-/heroku-cli-util-6.1.14.tgz#ab083c5df1ef90d500fec952f14c88350bef4405"
+heroku-cli-util@6.1.15:
+  version "6.1.15"
+  resolved "https://registry.yarnpkg.com/heroku-cli-util/-/heroku-cli-util-6.1.15.tgz#c4d0b91a785dc027934624f639106f172d7311bb"
   dependencies:
     ansi-escapes "1.4.0"
     cardinal "1.0.0"
