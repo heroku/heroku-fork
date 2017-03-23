@@ -21,8 +21,8 @@
   "homepage": "https://github.com/heroku/heroku-fork",
   "dependencies": {
     "co": "4.6.0",
-    "heroku-cli-addons": "1.2.12",
-    "heroku-cli-util": "6.1.14",
+    "heroku-cli-addons": "1.2.13",
+    "heroku-cli-util": "6.1.15",
     "lodash": "4.17.4"
   },
   "devDependencies": {
