@@ -22,7 +22,7 @@
   "dependencies": {
     "co": "4.6.0",
     "heroku-cli-addons": "1.2.13",
-    "heroku-cli-util": "6.1.15",
+    "heroku-cli-util": "6.1.17",
     "lodash": "4.17.4"
   },
   "devDependencies": {
