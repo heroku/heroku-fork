@@ -83,7 +83,7 @@ describe('fork', function() {
       this.timeout(2500);
 
       return cmd.run({flags: {from: 'from', to: 'to'}, args: {}}).then(function() {
-        expect('Setting buildpacks... done\nCreating mandrill:starter on to... !\n').to.equal(cli.stderr);
+        expect(cli.stderr).to.contain('Setting buildpacks... done\n');
         expect('').to.equal(cli.stdout);
       });
     });
@@ -102,7 +102,7 @@ describe('fork', function() {
       return cmd.run({flags: {from: 'from', to: 'to'}, args: {}}).catch(function(err) {
         thrown = true;
         expect(500).to.equal(err.statusCode);
-        expect('Setting buildpacks... done\nCreating mandrill:starter on to... !\n').to.equal(cli.stderr);
+        expect(cli.stderr).to.contain('Setting buildpacks... done\n');
         expect('').to.equal(cli.stdout);
       }).then(function() {
         expect(thrown).to.equal(true);
