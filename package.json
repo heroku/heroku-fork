@@ -20,17 +20,17 @@
   },
   "homepage": "https://github.com/heroku/heroku-fork",
   "dependencies": {
-    "co": "4.6.0",
-    "heroku-cli-addons": "1.2.13",
-    "heroku-cli-util": "6.1.17",
-    "lodash": "4.17.4"
+    "co": "4.x",
+    "heroku-cli-addons": "1.x",
+    "heroku-cli-util": "6.x",
+    "lodash": "4.x"
   },
   "devDependencies": {
-    "chai": "3.5.0",
+    "chai": "4.0.1",
     "jshint": "*",
-    "mocha": "3.2.0",
+    "mocha": "3.4.2",
     "mocha-junit-reporter": "1.13.0",
-    "nock": "9.0.4",
-    "nyc": "10.1.2"
+    "nock": "9.0.13",
+    "nyc": "11.0.1"
   }
 }
