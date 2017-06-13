@@ -61,7 +61,6 @@ function getToApp(context) {
 }
 
 function* fork (context, heroku) {
-  cli.warn('heroku fork is deprecated and will be sunset 2017-12-01');
   let apps = new Apps(heroku);
   let postgres = new Postgres(heroku);
   let addons = new Addons(heroku, postgres);
@@ -91,6 +90,8 @@ function* fork (context, heroku) {
 }
 
 function* run (context, heroku) {
+  cli.warn('heroku fork is deprecated and will be sunset 2017-12-01');
+  cli.warn('see https://github.com/heroku/heroku-fork for more information');
   fromAppName = getFromApp(context);
   if (!fromAppName) { return; }
   toAppName = getToApp(context);
