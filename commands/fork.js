@@ -117,7 +117,7 @@ New app name should not be an existing app. The new app will be created as part 
 
 Example:
 
-  $ heroku fork --from my-production-app --to my-development-app`,
+    $ heroku fork --from my-production-app --to my-development-app`,
   flags: [
     {name: 'confirm', description: 'overwrite existing config vars or existing add-on attachments', hasValue: true},
     {name: 'region', description: 'specify a region', hasValue: true},
