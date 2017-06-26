@@ -90,6 +90,8 @@ function* fork (context, heroku) {
 }
 
 function* run (context, heroku) {
+  cli.warn('heroku fork is deprecated and will be sunset 2017-12-01');
+  cli.warn('see https://github.com/heroku/heroku-fork for more information');
   fromAppName = getFromApp(context);
   if (!fromAppName) { return; }
   toAppName = getToApp(context);
@@ -108,6 +110,7 @@ function* run (context, heroku) {
 
 const cmd = {
   needsAuth: true,
+  hidden: true,
   description: 'fork an existing app into a new one',
   help: `Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
 New app name should not be an existing app. The new app will be created as part of the forking process.
