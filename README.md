@@ -23,6 +23,8 @@ Fork an existing app into a new one
 
 `-a, --app` undefined
 
+`--space` heroku private space name to create app within
+
 ```
 Copy config vars and Heroku Postgres data, and re-provision add-ons to a new app.
 New app name should not be an existing app. The new app will be created as part of the forking process.
@@ -106,7 +108,7 @@ There are some add-ons that require additional configuration after provisioning.
 
 ### Heroku Postgres
 
-All Heroku Postgres databases on your application will be copied from your `sourceapp` to your target app using `pg:copy`. [Heroku Postgres fork](https://devcenter.heroku.com/articles/heroku-postgres-fork) is not used for this. If you have followers, this will result in duplicate copies that are not currently following your leader database. 
+All Heroku Postgres databases on your application will be copied from your `sourceapp` to your target app using `pg:copy`. [Heroku Postgres fork](https://devcenter.heroku.com/articles/heroku-postgres-fork) is not used for this. If you have followers, this will result in duplicate copies that are not currently following your leader database.
 
 For the larger size databases, this step will take a long time. You can skip this step by passing `--skip-pg` flag:
 

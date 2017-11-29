@@ -69,7 +69,7 @@ function* fork (context, heroku) {
   let slug   = yield apps.getLastSlug(oldApp);
 
   if (stopping) { return; }
-  let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.region);
+  let newApp = yield apps.createNewApp(oldApp, toAppName, context.flags.region, context.flags.space);
   deleteAppOnFailure = newApp.name;
 
   if (stopping) { return; }
@@ -124,7 +124,8 @@ Example:
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
     {name: 'from', description: 'app to fork from', hasValue: true},
     {name: 'to', description: 'app to create', hasValue: true},
-    {name: 'app', char: 'a', hasValue: true, hidden: true}
+    {name: 'app', char: 'a', hasValue: true, hidden: true},
+    {name: 'space', description: 'space in which to create the new app', hasValue: true}
   ],
   args: [{name: 'NEWNAME', optional: true, hidden: true}],
   run: cli.command({preauth: true}, co.wrap(run))
