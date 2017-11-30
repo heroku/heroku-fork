@@ -17,6 +17,8 @@ Fork an existing app into a new one
 
 `--skip-pg` skip postgres databases
 
+`--skip-attachments` skip attachments for add-ons not on the source app
+
 `--from` app to fork from
 
 `--to` app to create

@@ -76,7 +76,7 @@ function* fork (context, heroku) {
   yield cli.action('Setting buildpacks', apps.setBuildpacks(oldApp, newApp));
 
   if (stopping) { return; }
-  yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg'], context.flags.confirm);
+  yield addons.copyAddons(oldApp, newApp, context.flags['skip-pg'], context.flags.confirm, context.flags['skip-attachments']);
 
   if (stopping) { return; }
   yield addons.copyConfigVars(oldApp, newApp, context.flags['skip-pg']);
@@ -122,6 +122,7 @@ Example:
     {name: 'confirm', description: 'overwrite existing config vars or existing add-on attachments', hasValue: true},
     {name: 'region', description: 'specify a region', hasValue: true},
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
+    {name: 'skip-attachments', description: 'skip attachments for add-ons not on the source app', hasValue: false},
     {name: 'from', description: 'app to fork from', hasValue: true},
     {name: 'to', description: 'app to create', hasValue: true},
     {name: 'app', char: 'a', hasValue: true, hidden: true},
