@@ -82,7 +82,9 @@ function* fork (context, heroku) {
   yield addons.copyConfigVars(oldApp, newApp, context.flags['skip-pg']);
 
   if (stopping) { return; }
-  yield apps.copySlug(oldApp, newApp, slug);
+  if (!context.flags['skip-slug']){
+      yield apps.copySlug(oldApp, newApp, slug);
+  }
 
   yield wait(2000); // TODO remove this after api #4022
 
@@ -123,6 +125,7 @@ Example:
     {name: 'region', description: 'specify a region', hasValue: true},
     {name: 'skip-pg', description: 'skip postgres databases', hasValue: false},
     {name: 'skip-attachments', description: 'skip attachments for add-ons not on the source app', hasValue: false},
+    {name: 'skip-slug', description: 'skip deploying slug', hasValue: false},
     {name: 'from', description: 'app to fork from', hasValue: true},
     {name: 'to', description: 'app to create', hasValue: true},
     {name: 'app', char: 'a', hasValue: true, hidden: true},

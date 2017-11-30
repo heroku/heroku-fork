@@ -19,6 +19,8 @@ Fork an existing app into a new one
 
 `--skip-attachments` skip attachments for add-ons not on the source app
 
+`--skip-slug` skip deploying slug
+
 `--from` app to fork from
 
 `--to` app to create
