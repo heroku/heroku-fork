@@ -90,8 +90,6 @@ function* fork (context, heroku) {
 }
 
 function* run (context, heroku) {
-  cli.warn('heroku fork is deprecated and will be sunset 2017-12-01');
-  cli.warn('see https://github.com/heroku/heroku-fork for more information');
   fromAppName = getFromApp(context);
   if (!fromAppName) { return; }
   toAppName = getToApp(context);
