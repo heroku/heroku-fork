@@ -625,9 +625,9 @@ has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
 
-heroku-cli-addons@^1.2.23:
-  version "1.2.23"
-  resolved "https://registry.yarnpkg.com/heroku-cli-addons/-/heroku-cli-addons-1.2.23.tgz#8748a08d182fc6070302abbf85f85544da4e3408"
+heroku-cli-addons@^1.2.26:
+  version "1.2.26"
+  resolved "https://registry.yarnpkg.com/heroku-cli-addons/-/heroku-cli-addons-1.2.26.tgz#17131b4c5a1906e79de16cf9cac6910ab8e43c4a"
   dependencies:
     co "4.6.0"
     co-wait "0.0.0"
