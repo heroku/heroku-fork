@@ -61,6 +61,12 @@ function getToApp(context) {
 }
 
 function* fork (context, heroku) {
+  console.log('HEROKU FORK IS UNMAINTAINED AND MAY NO LONGER FUNCTION.');
+  console.log('HEROKU FORK IS UNMAINTAINED AND MAY NO LONGER FUNCTION.');
+  console.log('HEROKU FORK IS UNMAINTAINED AND MAY NO LONGER FUNCTION.');
+  console.log('HEROKU FORK IS UNMAINTAINED AND MAY NO LONGER FUNCTION.');
+  console.log('HEROKU FORK IS UNMAINTAINED AND MAY NO LONGER FUNCTION.');
+  console.log('HEROKU FORK IS UNMAINTAINED AND MAY NO LONGER FUNCTION.');
   let apps = new Apps(heroku);
   let postgres = new Postgres(heroku);
   let addons = new Addons(heroku, postgres);
