@@ -1,7 +1,7 @@
 {
   "name": "heroku-fork",
   "description": "Heroku CLI plugin to fork an existing app into a new app.",
-  "version": "4.1.28",
+  "version": "4.1.29",
   "author": "Jeff Dickey (@dickeyxxx)",
   "bugs": {
     "url": "https://github.com/heroku/heroku-fork/issues"
