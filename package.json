@@ -1,24 +1,11 @@
 {
   "name": "heroku-fork",
-  "version": "4.1.28",
   "description": "Heroku CLI plugin to fork an existing app into a new app.",
-  "main": "index.js",
-  "scripts": {
-    "test": "nyc mocha && jshint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heroku/heroku-fork.git"
-  },
-  "keywords": [
-    "heroku-plugin"
-  ],
+  "version": "4.1.28",
   "author": "Jeff Dickey (@dickeyxxx)",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/heroku/heroku-fork/issues"
   },
-  "homepage": "https://github.com/heroku/heroku-fork",
   "dependencies": {
     "co": "4.x",
     "heroku-cli-addons": "^1.2.26",
@@ -32,5 +19,23 @@
     "mocha-junit-reporter": "1.13.0",
     "nock": "9.0.13",
     "nyc": "^11.0.3"
+  },
+  "files": [
+    "/index.js",
+    "/lib",
+    "/commands"
+  ],
+  "homepage": "https://github.com/heroku/heroku-fork",
+  "keywords": [
+    "heroku-plugin"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/heroku-fork.git"
+  },
+  "scripts": {
+    "test": "nyc mocha && jshint ."
   }
 }
