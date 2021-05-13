@@ -9,4 +9,4 @@ test:
     - MOCHA_FILE=$CIRCLE_TEST_REPORTS/mocha/results.xml nyc mocha test -R mocha-junit-reporter
     # - standard
   post:
-    - nyc report --reporter=text-lcov > coverage.lcov && bash <(curl -s https://codecov.io/bash)
+    - nyc report --reporter=text-lcov > coverage.lcov
